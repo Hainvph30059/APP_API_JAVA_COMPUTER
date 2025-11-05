@@ -1,0 +1,16 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+spring:
+
+  application:
+    name: hoangduong-service
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/hoangduongcomputer?authSource=admin
+      auto-index-creation: true
+app:
+  file:
+    storage-dir: C:/Users/Admin/Desktop/JAVA Spring/image
+    access-url: http://localhost:8080/api/product/image/
