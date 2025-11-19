@@ -3,6 +3,7 @@ package com.hoangduong.hoangduongcomputer.reponsitory.custom;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -33,5 +34,15 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         log.info("Update result: Matched={}, Modified={}", result.getMatchedCount(), result.getModifiedCount());
         log.info("url added: {}", urls);
         log.info("productId: {}", new ObjectId(productId));
+    }
+
+    @Override
+    public List<Product> findTopProductsByViewCount(String type, int limit) {
+        Query query = new Query()
+                .addCriteria(Criteria.where("productTypeName").is(type))
+                .with(Sort.by(Sort.Direction.DESC, "viewCount"))
+                .limit(limit);
+
+        return mongoTemplate.find(query, Product.class);
     }
 }

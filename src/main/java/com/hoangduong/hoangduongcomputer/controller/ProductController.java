@@ -100,4 +100,14 @@ public class ProductController {
         productService.deleteImgageUrl(productId, url);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("product/view-count/top") ApiReponse<List<ProductResponse>> getTopProducts(
+        @RequestParam(value = "type", required = false) String type,
+        @RequestParam(value = "limit", required = false, defaultValue = "10") int limit)
+        {
+        return ApiReponse.<List<ProductResponse>>builder()
+                .result(productService.getTopProducts(type, limit))
+                .build();
+    }
+
 }

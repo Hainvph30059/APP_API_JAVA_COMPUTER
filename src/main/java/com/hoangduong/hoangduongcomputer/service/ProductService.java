@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.hoangduong.hoangduongcomputer.entity.Product;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -153,5 +155,14 @@ public class ProductService {
                 product.getUrls().stream().filter(url -> !url.equals(urlDelete)).toList();
         product.setUrls(updateUrls);
         productRepository.save(product);
+    }
+
+
+    public List<ProductResponse> getTopProducts(String type, int limit) {
+        List<Product> topProducts = productRepository.findTopProductsByViewCount(type, limit);
+
+        return topProducts.stream()
+                .map(productMapper::toResponse)
+                .toList();
     }
 }
