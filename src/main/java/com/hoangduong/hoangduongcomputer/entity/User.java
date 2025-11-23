@@ -1,32 +1,69 @@
 package com.hoangduong.hoangduongcomputer.entity;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.Instant;
+
+@Document(collection = "users")
 @Data
-@Document(collection = "Users")
 @Builder
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+
     @Id
-    String id;
+    private String id;
 
-    String username;
-    String passwordHash;
-    String email;
-    String firstName;
-    String lastName;
-    String phoneNumber;
-    List<String> address;
-    LocalDateTime dateCreated;
+    @Indexed(unique = true)
+    private String email;
 
-    Set<String> roleIds;
+    private String password;
+
+    private String username;
+
+    @Field("displayName")
+    private String displayName;
+
+    private String avatar;
+
+    @Builder.Default
+    private String role = UserRole.CLIENT.getValue();
+
+    @Builder.Default
+    @Field("isActive")
+    private Boolean isActive = false;
+
+    @Field("verifyToken")
+    private String verifyToken;
+
+    @Builder.Default
+    private Instant createdAt = Instant.now();
+
+    private Instant updatedAt;
+
+    @Builder.Default
+    @Field("_destroy")
+    private Boolean destroy = false;
+
+    public enum UserRole {
+        CLIENT("client"),
+        ADMIN("admin");
+
+        private final String value;
+
+        UserRole(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }
