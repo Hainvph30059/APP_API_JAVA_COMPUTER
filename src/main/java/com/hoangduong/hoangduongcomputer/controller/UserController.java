@@ -1,5 +1,6 @@
 package com.hoangduong.hoangduongcomputer.controller;
 
+import com.hoangduong.hoangduongcomputer.dto.ApiReponse;
 import com.hoangduong.hoangduongcomputer.dto.request.LoginRequest;
 import com.hoangduong.hoangduongcomputer.dto.request.RegisterRequest;
 import com.hoangduong.hoangduongcomputer.dto.request.UpdateUserRequest;
@@ -19,7 +20,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -29,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
+    private final RestClient.Builder builder;
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
@@ -76,6 +80,16 @@ public class UserController {
         CookieUtil.addCookie(httpResponse, "accessToken", response.getAccessToken(), CookieUtil.FOURTEEN_DAYS);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ApiReponse<UserResponse> introspecs(
+            @AuthenticationPrincipal String userId
+    ) {
+        UserResponse user = userService.introspecs(userId);
+        return ApiReponse.<UserResponse>builder()
+                .result(user)
+                .build();
     }
 
     @PutMapping("/update")

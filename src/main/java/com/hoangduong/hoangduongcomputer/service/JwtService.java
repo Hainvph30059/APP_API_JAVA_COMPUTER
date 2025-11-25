@@ -1,8 +1,8 @@
 package com.hoangduong.hoangduongcomputer.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +51,18 @@ public class JwtService {
         return generateToken(userId, email, refreshTokenSecret, refreshTokenLife);
     }
 
+//    public Claims verifyToken(String token, String secretSignature) throws Exception {
+//        try {
+//            SecretKey key = Keys.hmacShaKeyFor(secretSignature.getBytes(StandardCharsets.UTF_8));
+//            return Jwts.parser()
+//                    .verifyWith(key)
+//                    .build()
+//                    .parseSignedClaims(token)
+//                    .getPayload();
+//        } catch (Exception e) {
+//            throw new Exception(e.getMessage());
+//        }
+//    }
     public Claims verifyToken(String token, String secretSignature) throws Exception {
         try {
             SecretKey key = Keys.hmacShaKeyFor(secretSignature.getBytes(StandardCharsets.UTF_8));
@@ -59,8 +71,12 @@ public class JwtService {
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
+        } catch (ExpiredJwtException e) {
+            throw e; // Throw lại exception gốc
+        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException e) {
+            throw e; // Throw lại exception gốc
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw e;
         }
     }
 

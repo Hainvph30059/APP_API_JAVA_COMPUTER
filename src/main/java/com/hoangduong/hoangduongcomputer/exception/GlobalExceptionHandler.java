@@ -1,6 +1,6 @@
 package com.hoangduong.hoangduongcomputer.exception;
 
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;

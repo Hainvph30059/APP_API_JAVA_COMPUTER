@@ -12,6 +12,10 @@ import com.hoangduong.hoangduongcomputer.entity.User;
 import com.hoangduong.hoangduongcomputer.exception.ApiError;
 import com.hoangduong.hoangduongcomputer.reponsitory.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -120,12 +124,10 @@ public class UserService {
         if (clientRefreshToken == null || clientRefreshToken.isEmpty()) {
             throw new ApiError(HttpStatus.NOT_FOUND, "Token not found!");
         }
-
         try {
             Claims claims = jwtService.verifyRefreshToken(clientRefreshToken);
             String userId = claims.get("_id", String.class);
             String email = claims.get("email", String.class);
-
             String newAccessToken = jwtService.generateAccessToken(userId, email);
 
             return RefreshTokenResponse.builder()
@@ -168,6 +170,15 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
+
+    public UserResponse introspecs(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiError(HttpStatus.NOT_FOUND, "Account not found!"));
+
+        // Không cần check isActive vì filter đã check rồi
+        return mapToUserResponse(user);
+    }
+
 
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()

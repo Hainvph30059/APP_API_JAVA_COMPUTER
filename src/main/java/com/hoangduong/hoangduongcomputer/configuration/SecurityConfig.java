@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,14 +21,16 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity(
+        prePostEnabled = true,   // Enable @PreAuthorize, @PostAuthorize
+        securedEnabled = true,    // Enable @Secured
+        jsr250Enabled = true      // Enable @RolesAllowed
+)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-
-    @PostConstruct
-    public void init() {
-        System.out.println("SecurityConfig initialized");
-    }
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,11 +43,17 @@ public class SecurityConfig {
                                 "/v1/users/verify",
                                 "/v1/users/login",
                                 "/v1/users/refresh-token",
+                                "/v1/users/logout",
                                 "/product/**",
                                 "/product-type/**",
                                 "/attribute-template/**"
                         ).permitAll()
                         .anyRequest().authenticated()
+                )
+                // Xử lý lỗi authentication và authorization
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

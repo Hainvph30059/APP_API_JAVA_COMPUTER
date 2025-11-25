@@ -15,9 +15,7 @@ public class CookieUtil {
     }
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = createCookie(name, value, maxAge);
-        response.addCookie(cookie);
-
+        // Chỉ dùng addHeader với đầy đủ thuộc tính để tránh tạo duplicate cookies
         response.addHeader("Set-Cookie", String.format(
                 "%s=%s; Path=/; Max-Age=%d; HttpOnly; Secure; SameSite=None",
                 name, value, maxAge
@@ -25,12 +23,11 @@ public class CookieUtil {
     }
 
     public static void deleteCookie(HttpServletResponse response, String name) {
-        Cookie cookie = new Cookie(name, null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        // Xóa cookie bằng cách set Max-Age=0
+        response.addHeader("Set-Cookie", String.format(
+                "%s=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=None",
+                name
+        ));
     }
 
     public static final int FOURTEEN_DAYS = 14 * 24 * 60 * 60;
