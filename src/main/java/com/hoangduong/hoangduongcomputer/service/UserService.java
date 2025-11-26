@@ -62,6 +62,7 @@ public class UserService {
             Cart newCart = Cart.builder()
                     .userId(savedUser.getId())
                     .build();
+            cartRepository.save(newCart);
 
             String verificationLink = String.format(
                     "%s/HoangDuongComputer/htmldemo.net/rozer/rozer/verification.html?email=%s&token=%s",
