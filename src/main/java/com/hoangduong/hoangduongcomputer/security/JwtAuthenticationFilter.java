@@ -166,7 +166,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.startsWith("/api/product") ||
                 path.startsWith("/api/product-type") ||
                 path.startsWith("/api/attribute-template");
-        
+
         return shouldSkip;
     }
 }

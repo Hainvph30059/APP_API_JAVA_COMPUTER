@@ -8,8 +8,10 @@ import com.hoangduong.hoangduongcomputer.dto.response.AuthResponse;
 import com.hoangduong.hoangduongcomputer.dto.response.RefreshTokenResponse;
 import com.hoangduong.hoangduongcomputer.dto.response.UserResponse;
 
+import com.hoangduong.hoangduongcomputer.entity.Cart;
 import com.hoangduong.hoangduongcomputer.entity.User;
 import com.hoangduong.hoangduongcomputer.exception.ApiError;
+import com.hoangduong.hoangduongcomputer.reponsitory.CartRepository;
 import com.hoangduong.hoangduongcomputer.reponsitory.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,6 +33,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
     private final JwtService jwtService;
     private final EmailService emailService;
     private final CloudinaryService cloudinaryService;
@@ -56,6 +59,9 @@ public class UserService {
                     .build();
 
             User savedUser = userRepository.save(newUser);
+            Cart newCart = Cart.builder()
+                    .userId(savedUser.getId())
+                    .build();
 
             String verificationLink = String.format(
                     "%s/HoangDuongComputer/htmldemo.net/rozer/rozer/verification.html?email=%s&token=%s",
