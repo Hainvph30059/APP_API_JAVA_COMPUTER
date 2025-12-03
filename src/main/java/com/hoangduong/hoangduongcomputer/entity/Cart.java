@@ -1,6 +1,8 @@
 package com.hoangduong.hoangduongcomputer.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -16,8 +18,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class Cart {
     @Id
-    String id;
+    private String id;
 
-    String userId;
-    LocalDateTime dateCreated;
+    private String userId;
+    private LocalDateTime dateCreated;
+
+    private List<CartItem> items = new ArrayList<>();
 }
+
+

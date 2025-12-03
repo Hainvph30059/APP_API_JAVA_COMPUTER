@@ -1,6 +1,6 @@
 package com.hoangduong.hoangduongcomputer.controller;
 
-import com.hoangduong.hoangduongcomputer.dto.ApiReponse;
+import com.hoangduong.hoangduongcomputer.dto.ApiResponse;
 import com.hoangduong.hoangduongcomputer.dto.request.RoleRequest;
 import com.hoangduong.hoangduongcomputer.dto.response.RoleResponse;
 import com.hoangduong.hoangduongcomputer.service.RoleService;
@@ -15,23 +15,23 @@ public class RoleController {
     RoleService roleService;
 
     @PostMapping("/role")
-    ApiReponse<RoleResponse> create(RoleRequest request) {
-        return ApiReponse.<RoleResponse>builder()
+    ApiResponse<RoleResponse> create(RoleRequest request) {
+        return ApiResponse.<RoleResponse>builder()
                 .result(roleService.create(request))
                 .build();
     }
 
     @GetMapping("/role/{roleId}")
-    ApiReponse<RoleResponse> getById(@PathVariable  String roleId) {
-        return ApiReponse.<RoleResponse>builder()
+    ApiResponse<RoleResponse> getById(@PathVariable  String roleId) {
+        return ApiResponse.<RoleResponse>builder()
                 .result(roleService.getById(roleId))
                 .build();
     }
 
     @DeleteMapping("/role/{roleId}")
-    ApiReponse<String> delete(@PathVariable String roleId) {
+    ApiResponse<String> delete(@PathVariable String roleId) {
         roleService.delete(roleId);
-        return ApiReponse.<String>builder()
+        return ApiResponse.<String>builder()
                 .result("Delete role successfully")
                 .build();
     }

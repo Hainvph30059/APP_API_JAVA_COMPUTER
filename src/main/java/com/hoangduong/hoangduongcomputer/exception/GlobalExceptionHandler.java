@@ -12,7 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.hoangduong.hoangduongcomputer.dto.ApiReponse;
+import com.hoangduong.hoangduongcomputer.dto.ApiResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @ControllerAdvice
@@ -21,10 +21,10 @@ public class GlobalExceptionHandler {
     private static String MIN_ATTRIBUTE = "min";
 
     @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiReponse> handlingRunTimeException(
+    ResponseEntity<ApiResponse> handlingRunTimeException(
             RuntimeException exception) { // bắt ngoại lệ với runtimeException
         exception.printStackTrace(); // Log chi tiết exception
-        ApiReponse apiResponse = new ApiReponse();
+        ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         apiResponse.setMessage(exception.getMessage() != null ? exception.getMessage() : ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
@@ -59,21 +59,21 @@ public class GlobalExceptionHandler {
     //    }
 
     @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiReponse> handlingAppException(AppException exception) { // bắt ngoại lệ với class tự định nghĩa
+    ResponseEntity<ApiResponse> handlingAppException(AppException exception) { // bắt ngoại lệ với class tự định nghĩa
         ErrorCode errorCode = exception.getErrorCode();
-        ApiReponse apiReponse = new ApiReponse();
-        apiReponse.setCode(errorCode.getCode());
-        apiReponse.setMessage(errorCode.getMessage());
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(apiReponse);
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(apiResponse);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
-    ResponseEntity<ApiReponse> handlingAccessDeniedException(AccessDeniedException exception) {
+    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 
         return ResponseEntity.status(errorCode.getHttpStatusCode())
-                .body(ApiReponse.builder()
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .message(errorCode.getMessage())
                         .build());

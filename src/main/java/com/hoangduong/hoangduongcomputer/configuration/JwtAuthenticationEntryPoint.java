@@ -1,7 +1,7 @@
 package com.hoangduong.hoangduongcomputer.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoangduong.hoangduongcomputer.dto.ApiReponse;
+import com.hoangduong.hoangduongcomputer.dto.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         response.setStatus(statusCode);
 
-        ApiReponse<Object> apiResponse = ApiReponse.builder()
+        ApiResponse<Object> apiResponse = ApiResponse.builder()
                 .code(statusCode)
                 .message(errorMessage)
                 .build();

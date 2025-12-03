@@ -1,6 +1,4 @@
-package com.hoangduong.hoangduongcomputer.dto;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
+package com.hoangduong.hoangduongcomputer.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,11 +12,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiReponse<T> {
-    @Builder.Default
-    private int code = 1000;
-
-    private String message;
-    private T result;
+public class CartItemResponse {
+    String productId;
+    String name;
+    Double price;
+    String imageUrl; // Ảnh đầu tiên
+    Integer quantity;
+    Double totalPrice; // price * quantity
 }

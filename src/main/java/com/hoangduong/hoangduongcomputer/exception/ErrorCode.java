@@ -25,6 +25,13 @@ public enum ErrorCode {
     ROLE_EXISTED(1016, "Role existed", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(1017, "Role not existed", HttpStatus.BAD_REQUEST),
     ATTRIBUTE_TEMPLATE_NOT_EXISTED(1018, "Attribute template not existed", HttpStatus.BAD_REQUEST),
+    SHIPPING_ADDRESS_NOT_FOUND(1019, "Shipping address not found", HttpStatus.NOT_FOUND),
+    INVALID_SHIPPING_ADDRESS(1020, "Invalid shipping address", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(1021, "Order not found", HttpStatus.NOT_FOUND),
+    ORDER_ACCESS_DENIED(1022, "Access denied to this order", HttpStatus.FORBIDDEN),
+    INSUFFICIENT_STOCK(1023, "Insufficient stock for product", HttpStatus.BAD_REQUEST),
+    INVALID_ORDER_STATUS(1024, "Cannot perform action in current status", HttpStatus.BAD_REQUEST),
+    INVALID_ORDER_TRANSITION(1025, "Invalid order status transition", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

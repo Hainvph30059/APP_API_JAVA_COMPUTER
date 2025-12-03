@@ -1,7 +1,7 @@
 package com.hoangduong.hoangduongcomputer.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoangduong.hoangduongcomputer.dto.ApiReponse;
+import com.hoangduong.hoangduongcomputer.dto.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpStatus.FORBIDDEN.value());
 
-        ApiReponse<Object> apiResponse = ApiReponse.builder()
+        ApiResponse<Object> apiResponse = ApiResponse.builder()
                 .code(HttpStatus.FORBIDDEN.value())
                 .message("You don't have permission to access this resource!")
                 .build();

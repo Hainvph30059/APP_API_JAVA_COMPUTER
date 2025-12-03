@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoangduong.hoangduongcomputer.dto.ApiReponse;
+import com.hoangduong.hoangduongcomputer.dto.ApiResponse;
 import com.hoangduong.hoangduongcomputer.dto.PageResponse;
 import com.hoangduong.hoangduongcomputer.dto.request.ProductRequest;
 import com.hoangduong.hoangduongcomputer.dto.response.ProductResponse;
@@ -28,57 +28,57 @@ public class ProductController {
     ObjectMapper objectMapper;
 
     @PostMapping(value = "/product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiReponse<ProductResponse> create(
+    ApiResponse<ProductResponse> create(
             @RequestParam("request") String requestJson, @RequestParam("file") List<MultipartFile> fileImages)
             throws IOException {
         var request = objectMapper.readValue(requestJson, ProductRequest.class);
-        return ApiReponse.<ProductResponse>builder()
+        return ApiResponse.<ProductResponse>builder()
                 .result(productService.create(request, fileImages))
                 .build();
     }
 
     @GetMapping(value = "/product/{productId}")
-    ApiReponse<ProductResponse> getById(@PathVariable String productId) {
-        return ApiReponse.<ProductResponse>builder()
+    ApiResponse<ProductResponse> getById(@PathVariable String productId) {
+        return ApiResponse.<ProductResponse>builder()
                 .result(productService.getById(productId))
                 .build();
     }
 
     @GetMapping(value = "/product")
-    ApiReponse<PageResponse<ProductResponse>> getAll(
+    ApiResponse<PageResponse<ProductResponse>> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        return ApiReponse.<PageResponse<ProductResponse>>builder()
+        return ApiResponse.<PageResponse<ProductResponse>>builder()
                 .result(productService.getAll(page, size))
                 .build();
     }
 
     @GetMapping(value = "/product/product-type-name/{productTypeName}")
-    ApiReponse<PageResponse<ProductResponse>> getByProductTypeName(
+    ApiResponse<PageResponse<ProductResponse>> getByProductTypeName(
             @PathVariable String productTypeName,
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        return ApiReponse.<PageResponse<ProductResponse>>builder()
+        return ApiResponse.<PageResponse<ProductResponse>>builder()
                 .result(productService.getByProductTypeName(productTypeName,page, size))
                 .build();
     }
 
     @PutMapping(value = "/product/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiReponse<ProductResponse> update(
+    ApiResponse<ProductResponse> update(
                 @PathVariable String productId,
                 @RequestParam("request") String requestJson,
                 @RequestParam(value = "file", required = false) List<MultipartFile> fileImages)
             throws IOException {
         var request = objectMapper.readValue(requestJson, ProductRequest.class);
-        return ApiReponse.<ProductResponse>builder()
+        return ApiResponse.<ProductResponse>builder()
                 .result(productService.update(productId, request, fileImages))
                 .build();
     }
 
     @DeleteMapping(value = "/product/{productId}")
-    ApiReponse<String> delete(@PathVariable String productId) {
+    ApiResponse<String> delete(@PathVariable String productId) {
         productService.delete(productId);
-        return ApiReponse.<String>builder()
+        return ApiResponse.<String>builder()
                 .result("Delete product successfully")
                 .build();
     }
@@ -101,11 +101,12 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("product/view-count/top") ApiReponse<List<ProductResponse>> getTopProducts(
+    @GetMapping("product/view-count/top")
+    ApiResponse<List<ProductResponse>> getTopProducts(
         @RequestParam(value = "type", required = false) String type,
         @RequestParam(value = "limit", required = false, defaultValue = "10") int limit)
         {
-        return ApiReponse.<List<ProductResponse>>builder()
+        return ApiResponse.<List<ProductResponse>>builder()
                 .result(productService.getTopProducts(type, limit))
                 .build();
     }

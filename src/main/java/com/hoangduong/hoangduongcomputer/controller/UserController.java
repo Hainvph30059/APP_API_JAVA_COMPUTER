@@ -1,6 +1,6 @@
 package com.hoangduong.hoangduongcomputer.controller;
 
-import com.hoangduong.hoangduongcomputer.dto.ApiReponse;
+import com.hoangduong.hoangduongcomputer.dto.ApiResponse;
 import com.hoangduong.hoangduongcomputer.dto.request.LoginRequest;
 import com.hoangduong.hoangduongcomputer.dto.request.RegisterRequest;
 import com.hoangduong.hoangduongcomputer.dto.request.UpdateUserRequest;
@@ -32,7 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final RestClient.Builder builder;
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
@@ -83,11 +82,11 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ApiReponse<UserResponse> introspecs(
+    public ApiResponse<UserResponse> introspecs(
             @AuthenticationPrincipal String userId
     ) {
         UserResponse user = userService.introspecs(userId);
-        return ApiReponse.<UserResponse>builder()
+        return ApiResponse.<UserResponse>builder()
                 .result(user)
                 .build();
     }
