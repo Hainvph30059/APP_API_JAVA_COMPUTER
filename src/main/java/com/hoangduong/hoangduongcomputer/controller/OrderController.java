@@ -1,6 +1,7 @@
 package com.hoangduong.hoangduongcomputer.controller;
 
 import com.hoangduong.hoangduongcomputer.dto.ApiResponse;
+import com.hoangduong.hoangduongcomputer.dto.request.CalculateShippingFeeRequest;
 import com.hoangduong.hoangduongcomputer.dto.request.CancelOrderRequest;
 import com.hoangduong.hoangduongcomputer.dto.request.CreateOrderRequest;
 import com.hoangduong.hoangduongcomputer.dto.request.UpdateOrderStatusRequest;
@@ -109,4 +110,22 @@ public class OrderController {
                 .result(message)
                 .build();
     }
+
+    /**
+     * Tạm tính phí giao hàng
+     */
+    @PostMapping("/calculate-shipping-fee")
+    ApiResponse<Double> calculateShippingFee(@RequestBody CalculateShippingFeeRequest request) {
+
+        double shippingFee = orderService.calculateShippingFee(
+                request.getShippingAddressId(), 
+                request.getSubtotal()
+        );
+
+        return ApiResponse.<Double>builder()
+                .result(shippingFee)
+                .build();
+    }
+
+    
 }

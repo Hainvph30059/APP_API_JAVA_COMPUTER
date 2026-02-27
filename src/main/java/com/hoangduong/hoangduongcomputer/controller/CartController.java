@@ -107,4 +107,19 @@ public class CartController {
                 .message("Cart cleared successfully")
                 .build();
     }
+
+    /**
+     * Lấy số lượng sản phẩm trong giỏ hàng
+     * GET /api/cart/count
+     */
+    @GetMapping("/count")
+    public ApiResponse<Integer> getCartItemCount(
+            @AuthenticationPrincipal String userId
+    ) {
+        int count = cartService.getCartItemCount(userId);
+
+        return ApiResponse.<Integer>builder()
+                .result(count)
+                .build();
+    }
 }

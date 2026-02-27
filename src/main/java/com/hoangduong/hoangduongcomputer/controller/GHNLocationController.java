@@ -55,5 +55,6 @@ public class GHNLocationController {
                 .result(ghnShippingService.getWards(districtId))
                 .build();
     }
+    
 }
 

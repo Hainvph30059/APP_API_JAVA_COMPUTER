@@ -169,6 +169,17 @@ public class OrderService {
     }
 
     /**
+     * Tạm tính phí giao hàng (dùng cho API public)
+     */
+    public double calculateShippingFee(String shippingAddressId, double subtotal) {
+        ShippingAddress shippingAddress = shippingAddressRepository
+                .findById(shippingAddressId)
+                .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_FOUND));
+        
+        return calculateShippingFee(shippingAddress, subtotal);
+    }
+
+    /**
      * Tính discount từ voucher
      */
     private double calculateDiscount(String voucherCode, double subtotal) {

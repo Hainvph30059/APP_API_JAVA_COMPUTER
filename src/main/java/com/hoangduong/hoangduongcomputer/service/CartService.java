@@ -229,4 +229,14 @@ public class CartService {
                 .totalPrice(totalPrice)
                 .build();
     }
+
+    /**
+     * Lấy số lượng sản phẩm trong giỏ hàng
+     * Trả về 0 nếu không có giỏ hàng hoặc giỏ hàng rỗng
+     */
+    public int getCartItemCount(String userId) {
+        return cartRepository.findByUserId(userId)
+                .map(cart -> cart.getItems() != null ? cart.getItems().size() : 0)
+                .orElse(0);
+    }
 }
